@@ -39,7 +39,7 @@ class BasePlugin:
             Domoticz.Device(Name="House consumption",  Unit=1, TypeName="kWh",Used=1).Create()
             Domoticz.Device(Name="Solar production",  Unit=2, TypeName="kWh", Used=1).Create()
             Domoticz.Device(Name="Energy bought",  Unit=3, TypeName="kWh", Used=1).Create()
-            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="%", Used=1).Create()
+            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Rate", Used=1).Create()
             logDebugMessage("Devices created.")
 
         Domoticz.Heartbeat(self.heartbeat)
@@ -124,10 +124,14 @@ class BasePlugin:
 
     def updateDeviceCurrent(self, jsonObject):
 
-        HouseConsumption = jsonObject["Body"]["Data"]["PAC"]["Value"]
-        SolarProduction = jsonObject["Body"]["Data"]["PAC"]["Value"]
-        EnergyBought = jsonObject["Body"]["Data"]["PAC"]["Value"]
-        AutonomyRate = jsonObject["Body"]["Data"]["PAC"]["Value"]
+        SolarProduction = jsonObject["Body"]["Data"]["Inverters"]["1"]["P"]
+        EnergyBought = jsonObject["Body"]["Data"]["Site"]["P_Grid"]
+
+        HouseConsumption = SolarProduction + EnergyBought
+        
+        AutonomyRate = 1
+        if (HouseConsumption > SolarProduction):
+            AutonomyRate = SolarProduction / HouseConsumption
 
         Devices[1].Update(HouseConsumption, str(HouseConsumption), Images["FroniusInverter"].ID)
         Devices[2].Update(SolarProduction, str(SolarProduction), Images["FroniusInverter"].ID)
