@@ -39,7 +39,7 @@ class BasePlugin:
             Domoticz.Device(Name="House consumption",  Unit=1, TypeName="kWh",Used=1).Create()
             Domoticz.Device(Name="Solar production",  Unit=2, TypeName="kWh", Used=1).Create()
             Domoticz.Device(Name="Energy bought",  Unit=3, TypeName="kWh", Used=1).Create()
-            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Custom", Options = { "Custom" : "%"}, Used=1).Create()
+            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Percentage", Used=1).Create()
             logDebugMessage("Devices created.")
 
         Domoticz.Heartbeat(self.heartbeat)
@@ -135,10 +135,10 @@ class BasePlugin:
         if (HouseConsumption > SolarProduction):
             AutonomyRate = round((SolarProduction / HouseConsumption) * 100)
 
-        Devices[1].Update(HouseConsumption, str(""), Images["FroniusInverter"].ID)
-        Devices[2].Update(SolarProduction, str(""), Images["FroniusInverter"].ID)
-        Devices[3].Update(EnergyBought, str(""), Images["FroniusInverter"].ID)
-        Devices[4].Update(AutonomyRate, str(""), Images["FroniusInverter"].ID)
+        Devices[1].Update(HouseConsumption, str(HouseConsumption), Images["FroniusInverter"].ID)
+        Devices[2].Update(SolarProduction, str(SolarProduction), Images["FroniusInverter"].ID)
+        Devices[3].Update(EnergyBought, str(EnergyBought), Images["FroniusInverter"].ID)
+        Devices[4].Update(AutonomyRate, str(AutonomyRate), Images["FroniusInverter"].ID)
 
         return
 
