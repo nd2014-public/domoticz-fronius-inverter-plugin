@@ -26,7 +26,7 @@ Installation
 In your `domoticz/plugins` directory do
 
 ```bash
-git clone https://github.com/aukedejong/domoticz-fronius-inverter-plugin.git
+git clone https://github.com/nd2014-public/domoticz-fronius-inverter-plugin.git
 ```
 
 Restart your Domoticz service with:
