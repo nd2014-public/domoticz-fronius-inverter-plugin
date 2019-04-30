@@ -78,7 +78,7 @@ class BasePlugin:
                     self.updateDeviceOff()
 
 
-            self.intervalCounter = 0
+            # self.intervalCounter = 0
 
         else:
             self.intervalCounter = 1
