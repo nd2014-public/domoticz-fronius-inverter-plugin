@@ -3,7 +3,7 @@
 #           Author:     ADJ, 2018
 #
 """
-<plugin key="froniusInverter" name="Fronius Inverter" author="ADJ" version="0.0.1" wikilink="https://github.com/aukedejong/domoticz-fronius-inverter-plugin.git" externallink="http://www.fronius.com">
+<plugin key="froniusInverter" name="Fronius Inverter With Autonomy Rate" author="ADJ" version="0.0.1" wikilink="https://github.com/aukedejong/domoticz-fronius-inverter-plugin.git" externallink="http://www.fronius.com">
     <params>
         <param field="Mode1" label="IP Address" required="true" width="200px" />
         <param field="Mode6" label="Debug" width="100px">
@@ -124,8 +124,8 @@ class BasePlugin:
 
     def updateDeviceCurrent(self, jsonObject):
 
-        SolarProduction = round(jsonObject["Body"]["Data"]["Inverters"]["1"]["P"])
-        EnergyBought = round(jsonObject["Body"]["Data"]["Site"]["P_Grid"])
+        SolarProduction = int(round(jsonObject["Body"]["Data"]["Inverters"]["1"]["P"]))
+        EnergyBought = int(round(jsonObject["Body"]["Data"]["Site"]["P_Grid"]))
 
         logDebugMessage("Solar prod :" + str(SolarProduction) + ", bought : " + str(EnergyBought))
 
@@ -135,10 +135,10 @@ class BasePlugin:
         if (HouseConsumption > SolarProduction):
             AutonomyRate = round((SolarProduction / HouseConsumption) * 100)
 
-        Devices[1].Update(int(HouseConsumption), str(HouseConsumption))
-        Devices[2].Update(int(SolarProduction), str(SolarProduction))
-        Devices[3].Update(int(EnergyBought), str(EnergyBought))
-        Devices[4].Update(int(AutonomyRate), str(AutonomyRate))
+        Devices[1].Update(HouseConsumption, str(HouseConsumption))
+        Devices[2].Update(SolarProduction, str(SolarProduction))
+        Devices[3].Update(EnergyBought, str(EnergyBought))
+        Devices[4].Update(AutonomyRate, str(AutonomyRate))
 
         return
 
