@@ -36,9 +36,9 @@ class BasePlugin:
             Domoticz.Debugging(1)
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="House consumption",  Unit=1, TypeName="kWh",Used=1).Create()
-            Domoticz.Device(Name="Solar production",  Unit=2, TypeName="kWh", Used=1).Create()
-            Domoticz.Device(Name="Energy bought",  Unit=3, TypeName="kWh", Used=1).Create()
+            Domoticz.Device(Name="House consumption",  Unit=1, TypeName="Custom", Options = { "Custom" : "1;Watt"},Used=1).Create()
+            Domoticz.Device(Name="Solar production",  Unit=2, TypeName="Custom", Options = { "Custom" : "1;Watt"}, Used=1).Create()
+            Domoticz.Device(Name="Energy bought",  Unit=3, TypeName="Custom", Options = { "Custom" : "1;Watt"}, Used=1).Create()
             Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Percentage", Used=1).Create()
             logDebugMessage("Devices created.")
 
