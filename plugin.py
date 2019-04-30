@@ -127,6 +127,8 @@ class BasePlugin:
         SolarProduction = jsonObject["Body"]["Data"]["Inverters"]["1"]["P"]
         EnergyBought = jsonObject["Body"]["Data"]["Site"]["P_Grid"]
 
+        logDebugMessage("Solar prod :" + str(SolarProduction) + ", bought : " + str(EnergyBought))
+
         HouseConsumption = SolarProduction + EnergyBought
         
         AutonomyRate = 1
