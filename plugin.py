@@ -3,7 +3,7 @@
 #           Author:     ADJ, 2018
 #
 """
-<plugin key="froniusInverter" name="Fronius Inverter With Autonomy Rate" author="ADJ" version="0.0.1" wikilink="https://github.com/aukedejong/domoticz-fronius-inverter-plugin.git" externallink="http://www.fronius.com">
+<plugin key="froniusInverterWithRate" name="Fronius Inverter With Autonomy Rate" author="ADJ" version="0.0.1" wikilink="https://github.com/nd2014public/domoticz-fronius-inverter-plugin.git" externallink="http://www.fronius.com">
     <params>
         <param field="Mode1" label="IP Address" required="true" width="200px" />
         <param field="Mode6" label="Debug" width="100px">
