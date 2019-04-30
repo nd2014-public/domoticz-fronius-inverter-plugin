@@ -124,8 +124,8 @@ class BasePlugin:
 
     def updateDeviceCurrent(self, jsonObject):
 
-        SolarProduction = jsonObject["Body"]["Data"]["Inverters"]["1"]["P"]
-        EnergyBought = jsonObject["Body"]["Data"]["Site"]["P_Grid"]
+        SolarProduction = round(jsonObject["Body"]["Data"]["Inverters"]["1"]["P"])
+        EnergyBought = round(jsonObject["Body"]["Data"]["Site"]["P_Grid"])
 
         logDebugMessage("Solar prod :" + str(SolarProduction) + ", bought : " + str(EnergyBought))
 
