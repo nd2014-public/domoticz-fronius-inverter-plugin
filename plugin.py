@@ -39,7 +39,7 @@ class BasePlugin:
             Domoticz.Device(Name="House consumption",  Unit=1, TypeName="kWh",Used=1).Create()
             Domoticz.Device(Name="Solar production",  Unit=2, TypeName="kWh", Used=1).Create()
             Domoticz.Device(Name="Energy bought",  Unit=3, TypeName="kWh", Used=1).Create()
-            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Rate", Used=1).Create()
+            Domoticz.Device(Name="Autonomy rate",  Unit=4, TypeName="Custom", Options = { "Custom" : "%"}, Used=1).Create()
             logDebugMessage("Devices created.")
 
         Domoticz.Heartbeat(self.heartbeat)
