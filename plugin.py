@@ -131,9 +131,9 @@ class BasePlugin:
 
         HouseConsumption = SolarProduction + EnergyBought
         
-        AutonomyRate = 1
+        AutonomyRate = 100
         if (HouseConsumption > SolarProduction):
-            AutonomyRate = SolarProduction / HouseConsumption
+            AutonomyRate = round((SolarProduction / HouseConsumption) * 100)
 
         Devices[1].Update(HouseConsumption, str(HouseConsumption), Images["FroniusInverter"].ID)
         Devices[2].Update(SolarProduction, str(SolarProduction), Images["FroniusInverter"].ID)
