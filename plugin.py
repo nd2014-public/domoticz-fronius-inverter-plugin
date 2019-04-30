@@ -135,10 +135,10 @@ class BasePlugin:
         if (HouseConsumption > SolarProduction):
             AutonomyRate = round((SolarProduction / HouseConsumption) * 100)
 
-        Devices[1].Update(HouseConsumption, str("0"))
-        Devices[2].Update(SolarProduction, str("0"))
-        Devices[3].Update(EnergyBought, str("0"))
-        Devices[4].Update(AutonomyRate, str("0"))
+        Devices[1].Update(int(HouseConsumption), str(HouseConsumption))
+        Devices[2].Update(int(SolarProduction), str(SolarProduction))
+        Devices[3].Update(int(EnergyBought), str(EnergyBought))
+        Devices[4].Update(int(AutonomyRate), str(AutonomyRate))
 
         return
 
