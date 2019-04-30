@@ -6,7 +6,6 @@
 <plugin key="froniusInverter" name="Fronius Inverter" author="ADJ" version="0.0.1" wikilink="https://github.com/aukedejong/domoticz-fronius-inverter-plugin.git" externallink="http://www.fronius.com">
     <params>
         <param field="Mode1" label="IP Address" required="true" width="200px" />
-        <param field="Mode2" label="Device ID" required="true" width="100px" />
         <param field="Mode6" label="Debug" width="100px">
             <options>
                 <option label="True" value="Debug"/>
@@ -37,8 +36,10 @@ class BasePlugin:
             Domoticz.Debugging(1)
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Current power",  Unit=1, TypeName="Custom", Options = { "Custom" : "1;Watt"}, Used=1).Create()
-            Domoticz.Device(Name="Total power",  Unit=2, TypeName="kWh", Used=1).Create()
+            Domoticz.Device(Name="House consumption",  Unit=1, TypeName="kWh",Used=1).Create()
+            Domoticz.Device(Name="Solar production",  Unit=1, TypeName="kWh", Used=1).Create()
+            Domoticz.Device(Name="Energy bought",  Unit=1, TypeName="kWh", Used=1).Create()
+            Domoticz.Device(Name="Autonomy rate",  Unit=2, TypeName="%", Used=1).Create()
             logDebugMessage("Devices created.")
 
         Domoticz.Heartbeat(self.heartbeat)
@@ -49,6 +50,8 @@ class BasePlugin:
 
         Devices[1].Update(0, sValue=str(Devices[1].sValue), Image=Images["FroniusInverter"].ID)
         Devices[2].Update(0, sValue=str(Devices[2].sValue), Image=Images["FroniusInverter"].ID)
+        Devices[3].Update(0, sValue=str(Devices[3].sValue), Image=Images["FroniusInverter"].ID)
+        Devices[4].Update(0, sValue=str(Devices[4].sValue), Image=Images["FroniusInverter"].ID)
         return True
 
 
@@ -57,13 +60,12 @@ class BasePlugin:
         if self.intervalCounter == 1:
 
             ipAddress = Parameters["Mode1"]
-            deviceId = Parameters["Mode2"]
-            jsonObject = self.getInverterRealtimeData( ipAddress, deviceId )
+            jsonObject = self.getInverterRealtimeData( ipAddress )
 
             if (self.isInverterActive(jsonObject)):
 
                 self.updateDeviceCurrent(jsonObject)
-                self.updateDeviceMeter(jsonObject)
+                # self.updateDeviceMeter(jsonObject)
 
                 if (self.inverterWorking == False):
                     self.inverterWorking = True
@@ -86,9 +88,9 @@ class BasePlugin:
         return True
 
 
-    def getInverterRealtimeData(self, ipAddress, deviceId):
+    def getInverterRealtimeData(self, ipAddress):
 
-        url = "http://" + ipAddress + "/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceID=" + deviceId + "&DataCollection=CommonInverterData"
+        url = "http://" + ipAddress + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi"
         logDebugMessage('Retrieve solar data from ' + url)
 
         try:
@@ -122,9 +124,15 @@ class BasePlugin:
 
     def updateDeviceCurrent(self, jsonObject):
 
-        currentWatts = jsonObject["Body"]["Data"]["PAC"]["Value"]
+        HouseConsumption = jsonObject["Body"]["Data"]["PAC"]["Value"]
+        SolarProduction = jsonObject["Body"]["Data"]["PAC"]["Value"]
+        EnergyBought = jsonObject["Body"]["Data"]["PAC"]["Value"]
+        AutonomyRate = jsonObject["Body"]["Data"]["PAC"]["Value"]
 
-        Devices[1].Update(currentWatts, str(currentWatts), Images["FroniusInverter"].ID)
+        Devices[1].Update(HouseConsumption, str(HouseConsumption), Images["FroniusInverter"].ID)
+        Devices[2].Update(SolarProduction, str(SolarProduction), Images["FroniusInverter"].ID)
+        Devices[3].Update(EnergyBought, str(EnergyBought), Images["FroniusInverter"].ID)
+        Devices[4].Update(AutonomyRate, str(AutonomyRate), Images["FroniusInverter"].ID)
 
         return
 
@@ -153,8 +161,12 @@ class BasePlugin:
     def updateDeviceOff(self):
 
         Devices[1].Update(0, "0", Images["FroniusInverterOff"].ID)
-        calculatedWh = self.previousTotalWh + self.whFraction
-        Devices[2].Update(0, "0;" + str(calculatedWh))
+        Devices[2].Update(0, "0", Images["FroniusInverterOff"].ID)
+        Devices[3].Update(0, "0", Images["FroniusInverterOff"].ID)
+        Devices[4].Update(0, "0", Images["FroniusInverterOff"].ID)
+
+        # calculatedWh = self.previousTotalWh + self.whFraction
+        # Devices[2].Update(0, "0;" + str(calculatedWh))
 
 
     def onStop(self):
