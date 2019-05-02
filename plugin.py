@@ -48,10 +48,10 @@ class BasePlugin:
         if ('FroniusInverter' not in Images): Domoticz.Image('Fronius Inverter Icons.zip').Create()
         if ('FroniusInverterOff' not in Images): Domoticz.Image('Fronius Inverter Off Icons.zip').Create()
 
-        Devices[1].Update(0, sValue=Devices[1].sValue, Image=Images["FroniusInverter"].ID)
-        Devices[2].Update(0, sValue=Devices[2].sValue, Image=Images["FroniusInverter"].ID)
-        Devices[3].Update(0, sValue=Devices[3].sValue, Image=Images["FroniusInverter"].ID)
-        Devices[4].Update(0, sValue=Devices[4].sValue, Image=Images["FroniusInverter"].ID)
+        Devices[1].Update(0, sValue=Devices[1].sValue, Image=Images["froniusInverterWithRate"].ID)
+        Devices[2].Update(0, sValue=Devices[2].sValue, Image=Images["froniusInverterWithRate"].ID)
+        Devices[3].Update(0, sValue=Devices[3].sValue, Image=Images["froniusInverterWithRate"].ID)
+        Devices[4].Update(0, sValue=Devices[4].sValue, Image=Images["froniusInverterWithRate"].ID)
         return True
 
 
