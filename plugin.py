@@ -45,8 +45,8 @@ class BasePlugin:
         Domoticz.Heartbeat(self.heartbeat)
         self.intervalCounter = 0
 
-        if ('FroniusInverter' not in Images): Domoticz.Image('Fronius Inverter Icons.zip').Create()
-        if ('FroniusInverterOff' not in Images): Domoticz.Image('Fronius Inverter Off Icons.zip').Create()
+        if ('froniusInverterWithRate' not in Images): Domoticz.Image('Fronius Inverter Icons.zip').Create()
+        if ('froniusInverterWithRateOff' not in Images): Domoticz.Image('Fronius Inverter Off Icons.zip').Create()
 
         Devices[1].Update(0, sValue=Devices[1].sValue, Image=Images["froniusInverterWithRate"].ID)
         Devices[2].Update(0, sValue=Devices[2].sValue, Image=Images["froniusInverterWithRate"].ID)
@@ -57,33 +57,23 @@ class BasePlugin:
 
     def onHeartbeat(self):
 
-        if self.intervalCounter == 1:
+        ipAddress = Parameters["Mode1"]
+        jsonObject = self.getInverterRealtimeData( ipAddress )
 
-            ipAddress = Parameters["Mode1"]
-            jsonObject = self.getInverterRealtimeData( ipAddress )
+        if (self.isInverterActive(jsonObject)):
 
-            if (self.isInverterActive(jsonObject)):
+            self.updateDeviceCurrent(jsonObject)
+            # self.updateDeviceMeter(jsonObject)
 
-                self.updateDeviceCurrent(jsonObject)
-                # self.updateDeviceMeter(jsonObject)
-
-                if (self.inverterWorking == False):
-                    self.inverterWorking = True
-
-            else:
-                self.logErrorCode(jsonObject)
-
-                if (self.inverterWorking == True):
-                    self.inverterWorking = False
-                    self.updateDeviceOff()
-
-
-            # self.intervalCounter = 0
+            if (self.inverterWorking == False):
+                self.inverterWorking = True
 
         else:
-            self.intervalCounter = 1
-            #logDebugMessage("Do nothing: " + str(self.intervalCounter))
+            self.logErrorCode(jsonObject)
 
+            if (self.inverterWorking == True):
+                self.inverterWorking = False
+                self.updateDeviceOff()
 
         return True
 
@@ -166,10 +156,10 @@ class BasePlugin:
 
     def updateDeviceOff(self):
 
-        Devices[1].Update(0, "0", Images["FroniusInverterOff"].ID)
-        Devices[2].Update(0, "0", Images["FroniusInverterOff"].ID)
-        Devices[3].Update(0, "0", Images["FroniusInverterOff"].ID)
-        Devices[4].Update(0, "0", Images["FroniusInverterOff"].ID)
+        Devices[1].Update(0, "0", Images["froniusInverterWithRateOff"].ID)
+        Devices[2].Update(0, "0", Images["froniusInverterWithRateOff"].ID)
+        Devices[3].Update(0, "0", Images["froniusInverterWithRateOff"].ID)
+        Devices[4].Update(0, "0", Images["froniusInverterWithRateOff"].ID)
 
         # calculatedWh = self.previousTotalWh + self.whFraction
         # Devices[2].Update(0, "0;" + str(calculatedWh))
